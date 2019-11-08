@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Refresh">
+<meta charset="utf-8">
+</head>
+<script type="text/javascript">
+function frameClick() {
+    document.location.href = "/serched";
+}
+</script>
+<style>
+.hla {
+    position: relative;
+    padding-left: 35px;
+    color: gray;
+}
+.hla:before {
+    position: absolute;
+    font-family: "Font Awesome 5 Free";
+    content: "\f0eb";
+    background: #ffca2c;
+    color: white;
+    font-weight: normal;
+    font-size: 15px;
+    border-radius: 50%;
+    left: 0;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.hla:after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 20px;
+    height: 0;
+    width: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 12px solid #ffca2c;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+body {
+    color: gray;
+}
+form {
+    display : inline-block;
+}
+
+.desu {
+    posision : relative;
+    top : 30px;
+}
+
+</style>
+</head>
+<body>
+<h1 class="hla">あなたのHLA型を入力してください。</h1>
+<form method="get" action="\search_patient">
+<input type="text" placeholder="A" name="search_A">
+<input type="text" placeholder="B" name="search_B">
+<input type="text" placeholder="C" name="search_C">
+<input type="text" placeholder="DR" name="search_DR">
+<input type="submit" class="send" value="検索" onclick="frameClick();">
+</form>
+<!--
+<table>
+    <tr th:each="emp : ${h_donor}" th:object="${emp}">
+        <td th:text="*{hla_id}"></td>
+        <td th:text="*{a}"></td>
+        <td th:text="*{b}"></td>
+        <td th:text="*{c}"></td>
+        <td th:text="*{dr}"></td>
+
+    </tr>
+</table>-->
+</body>
+</html>
