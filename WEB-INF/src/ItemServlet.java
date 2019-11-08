@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 @SuppressWarnings("serial")
 public class ItemServlet extends HttpServlet {
 
@@ -23,8 +22,7 @@ public class ItemServlet extends HttpServlet {
 
 	public void init() throws ServletException {
 		// iniファイルから自分のデータベース情報を読み込む
-		String iniFilePath = getServletConfig().getServletContext()
-				.getRealPath("WEB-INF/le4db.ini");
+		String iniFilePath = getServletConfig().getServletContext().getRealPath("WEB-INF/le4db.ini");
 		try {
 			FileInputStream fis = new FileInputStream(iniFilePath);
 			Properties prop = new Properties();
@@ -38,12 +36,12 @@ public class ItemServlet extends HttpServlet {
 		}
 	}
 
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		
+
 		String user_id = request.getParameter("user_id");
 
 		out.println("<html>");
@@ -54,30 +52,30 @@ public class ItemServlet extends HttpServlet {
 		Statement stmt = null;
 		try {
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("jdbc:postgresql://" + _hostname
-					+ ":5432/" + _dbname, _username, _password);
+			conn = DriverManager.getConnection("jdbc:postgresql://" + _hostname + ":5432/" + _dbname, _username,
+					_password);
 			stmt = conn.createStatement();
 
 			out.println("<form action=\"update\" method=\"GET\">");
 			out.println("ユーザID： " + user_id);
 			out.println("<input type=\"hidden\" name=\"update_user_data\" + value=\"" + user_id + "\"/>");
 			out.println("<br/>");
-			
+
 			ResultSet rs = stmt.executeQuery("SELECT * FROM address WHERE user_id = '" + user_id + "'");
 			while (rs.next()) {
 				int tel = rs.getInt("tel");
 				String prefecture = rs.getString("prefecture");
-				
+
 				out.println("連絡先： ");
 				out.println("<input type=\"text\" name=\"update_tel\" value=\"" + tel + "\"/>");
 				out.println("<br/>");
 				out.println("居場所： ");
 				out.println("<input type=\"text\" name=\"update_prefecture\" value=\"" + prefecture + "\"/>");
 				out.println("<br/>");
-				
+
 			}
 			rs.close();
-			
+
 			out.println("<input type=\"submit\" value=\"更新\"/>");
 			out.println("</form>");
 
@@ -100,14 +98,14 @@ public class ItemServlet extends HttpServlet {
 		out.println("</form>");
 
 		out.println("<br/>");
-		out.println("<a href=\"donor\">ドナーページに戻る</a>");
+		out.println("<a href=\"cordinator.html\">ドナー検索ページに戻る</a>");
 
 		out.println("</body>");
 		out.println("</html>");
 	}
 
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
 

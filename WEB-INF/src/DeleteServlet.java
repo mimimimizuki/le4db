@@ -54,17 +54,9 @@ public class DeleteServlet extends HttpServlet {
 					_password);
 			stmt = conn.createStatement();
 
+			ResultSet rs = stmt.executeQuery("SELECT * FROM user_data WHERE user_id = '" + deleteuser_data + "'");
 			out.println("以下のユーザを削除しました。<br/><br/>");
 			out.println("ユーザID: " + deleteuser_data + "<br/>");
-
-			ResultSet rs = stmt.executeQuery("SELECT * FROM user_data WHERE user_id = '" + deleteuser_data + "'");
-			while (rs.next()) {
-				String name = rs.getString("name");
-				int age = rs.getInt("age");
-
-				out.println("名前: " + name + "<br/>");
-				out.println("年齢: " + age + "<br/>");
-			}
 			rs.close();
 			stmt.executeUpdate("DELETE FROM register WHERE user_id= '" + deleteuser_data + "'");
 			stmt.executeUpdate("DELETE FROM user_data WHERE user_id= '" + deleteuser_data + "'");

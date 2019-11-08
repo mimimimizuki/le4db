@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
 public class SearchPatientServlet extends HttpServlet {
-	// コーディネータがユーザIDと一致する人の連絡先などを知るために検索する <-
-	// patientが自分と一致するHLA型の人を探すために検索する
+	// コーディネータがユーザIDと一致する人の連絡先などを知るために検索する
+	// patientが自分と一致するHLA型の人を探すために検索する<-
 	private String _hostname = null;
 	private String _dbname = null;
 	private String _username = null;
@@ -48,6 +50,8 @@ public class SearchPatientServlet extends HttpServlet {
 		int searchB = Integer.parseInt(request.getParameter("search_B"));
 		int searchC = Integer.parseInt(request.getParameter("search_C"));
 		int searchDR = Integer.parseInt(request.getParameter("search_DR"));
+		int loginer = Integer.parseInt(request.getParameter("user_id"));
+		ArrayList<Integer> users ＝ new ArrayList<>();
 
 		out.println("<html>");
 		out.println("<body>");
@@ -64,21 +68,26 @@ public class SearchPatientServlet extends HttpServlet {
 			ResultSet rs = stmt.executeQuery("SELECT * FROM (select * from hla natural join register) AS FOO WHERE a = "
 					+ searchA + " and b = " + searchB + " and c = " + searchC + " and dr = " + searchDR
 					+ " and patient_or_donor = 'D'");
-			if (rs.next() == false) {
-				out.println("適合するドナーは見つかりませんでした。");
-			}
+			// select * from
+			// 知りたい:ユーザIDとHLA型
+			// 条件に必要なもの:家族ID
+			// user_idをゲットした後に
+			// select family_id from relationship where user_id = ''
+			// family_id ==
 			out.println(
 					"<table border=\"1\" width=\"500\" cellspacing=\"0\" cellpadding=\"5\" bordercolor=\"#333333\">");
 			out.println(
 					"<tr><th bgcolor=\"gray\"><font color=\"#FFFFFF\">hla_id</th><th bgcolor=\"gray\"><font color=\"#FFFFFF\">user_id</th><th bgcolor=\"gray\"><font color=\"#FFFFFF\">A</th><th bgcolor=\"gray\"><font color=\"#FFFFFF\">B</th><th bgcolor=\"gray\"><font color=\"#FFFFFF\">C</th><th bgcolor=\"gray\"><font color=\"#FFFFFF\">DR</th></tr>");
+
 			while (rs.next()) {
+
 				int hla_id = rs.getInt("hla_id");
 				int user_id = rs.getInt("user_id");
+				users.add(user_id);
 				int A = rs.getInt("a");
 				int B = rs.getInt("b");
 				int C = rs.getInt("c");
 				int DR = rs.getInt("dr");
-
 				out.println("<tr>");
 				out.println("<td>" + hla_id + "</td>");
 				out.println("<td>" + user_id + "</td>");
@@ -88,6 +97,9 @@ public class SearchPatientServlet extends HttpServlet {
 				out.println("<td>" + DR + "</td>");
 				out.println("</tr>");
 			}
+
+			rs = stmt.executeQuery("SELECT family_id FROM relationship WHERE user_id = " + user_id);
+
 			rs.close();
 
 			out.println("</table>");

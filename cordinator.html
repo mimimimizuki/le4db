@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
+<meta  charset="utf-8">
 <style>
 body {
     color: dimgray;
@@ -36,13 +36,10 @@ body {
     opacity: 1;
     padding-left: 12px;
 }
-#register {
-    display: none;
-}
 #delete {
     display : none;
 }
-#update {
+#search {
     display : none;
 }
 .inText {
@@ -90,80 +87,32 @@ body {
 .Icon:hover {
   opacity       : 0.9;   /* カーソル時透明度 */
 }
-.center {
-  vertical-align : center;
-}
 </style>
-<script>
-function coloeSet(argObj){
-    if(argObj.value==""){
-        argObj.style.backgroundColor = "";
-    }else{
-        argObj.style.backgroundColor = "rgba(153, 153, 153, 0.20)";
-    }
-}
-
-function colorReset(argObj){
-    argObj.style.backgroundColor = "";
-}
-</script>
 </head>
 <body>
 <ul class="hidden_box">
-<label for="register" id="msg_menu_settings" style="
-    font-size: 25px;">データ登録</label>
-    <input type="checkbox" id="register"/>
-    <div class="hidden_show" style="padding-top: 25px;">
-    <form action="\add" method="POST">
-    <div class="center">
-		<input type="text" placeholder="氏名" name="add_name" class="inText" onblur="coloeSet(this)"
-    onfocus="colorReset(this)"/>
-		<input type="text" placeholder="連絡先" name="add_address" class="inText" onblur="coloeSet(this)"
-    onfocus="colorReset(this)"/>
-		<input type="text" placeholder="年齢" name="add_age" class="inText" onblur="coloeSet(this)"
-    onfocus="colorReset(this)"/>
-		<input type="text" placeholder="居場所" name="add_prefecture" class="inText" onblur="coloeSet(this)"
-    onfocus="colorReset(this)"/><br/>
-        <input type="text" placeholder="A" name="add_A" class="inText" onblur="coloeSet(this)"
-    onfocus="colorReset(this)"/>
-		<input type="text" placeholder="B" name="add_B" class="inText" onblur="coloeSet(this)"
-    onfocus="colorReset(this)"/>
-		<input type="text" placeholder="C" name="add_C" class="inText" onblur="coloeSet(this)"
-    onfocus="colorReset(this)"/>
-		<input type="text" placeholder="DR" name="add_DR" class="inText" onblur="coloeSet(this)"
-    onfocus="colorReset(this)"/>
-    <input type="submit" value="登録" class="Icon"/>
-    </div>
-    </form>
-</ul>
-<ul class="hidden_box">
-<label for="delete" id="msg_menu_settings" style="font-size: 25px;">データの削除</label>
+<label for="delete" id="msg_menu_settings" style="font-size: 25px;">患者データの削除</label>
     <input type="checkbox" id="delete"/>
     <div class="hidden_show" style="padding-top: 25px;">
     <form action="\delete" method="GET">
     <div class="center">
-    <input type="text" placeholder="ユーザ名" name="delete_user_id" class="inText" onblur="coloeSet(this)"
+    <input type="text" placeholder="ユーザID" name="delete_user_id" class="inText" onblur="coloeSet(this)"
     onfocus="colorReset(this)"/>
     <input type="submit" value="データを削除する" class="Icon"/>
     </form>
     </div>
 </ul>
-
 <ul class="hidden_box">
-<label for="update" id="msg_menu_settings" style="font-size: 25px;">データの更新</label>
-    <input type="checkbox" id="update"/>
+<label for="search" id="msg_menu_settings" style="font-size: 25px;">ドナー検索</label>
+    <input type="checkbox" id="search"/>
     <div class="hidden_show" style="padding-top: 25px;">
-    <form action="\update" method="GET">
+    <form action="\search" method="GET">
     <div class="center">
-    <input type="text" placeholder="ユーザ名" name="update_user_data" class="inText" onblur="coloeSet(this)"
+    <input type="text" placeholder="A" name="search_user_id" class="inText" onblur="coloeSet(this)"
     onfocus="colorReset(this)"/>
-		<input type="text" placeholder="連絡先" name="update_address" class="inText" onblur="coloeSet(this)"
-    onfocus="colorReset(this)"/>
-		<input type="text" placeholder="居場所" name="update_prefecture" class="inText" onblur="coloeSet(this)"
-    onfocus="colorReset(this)"/>
-        <input type="submit" value="更新" class="Icon"/>
-    </div>
+    <input type="submit" value="検索" class="Icon"/>
     </form>
+    </div>
 </ul>
 </body>
 </html>

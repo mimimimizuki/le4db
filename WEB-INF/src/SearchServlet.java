@@ -43,7 +43,7 @@ public class SearchServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 
-		String searchId = request.getParameter("search_user_id");
+		String searchID = request.getParameter("search_user_id");
 
 		out.println("<html>");
 		out.println("<body>");
@@ -57,11 +57,14 @@ public class SearchServlet extends HttpServlet {
 					_password);
 			stmt = conn.createStatement();
 
-			out.println("<table border=\"1\">");
-			out.println("<tr><th>user_id</th><th>氏名</th><th>年齢</th><th>連絡先</th><th>居場所</th></tr>");
+			out.println(
+					"<table border=\"1\" width=\"500\" cellspacing=\"0\" cellpadding=\"5\" bordercolor=\"#333333\">");
+			out.println(
+					"<tr><th bgcolor=\"gray\"><font color=\"#FFFFFF\">user_id</th><th bgcolor=\"gray\"><font color=\"#FFFFFF\">氏名</th><th bgcolor=\"gray\"><font color=\"#FFFFFF\">年齢</th><th bgcolor=\"gray\"><font color=\"#FFFFFF\">連絡先</th><th bgcolor=\"gray\"><font color=\"#FFFFFF\">居場所</th></tr>");
 			// ResultSet rs = stmt.executeQuery("SELECT * FROM address");
 			ResultSet rs = stmt.executeQuery(
-					"SELECT * FROM user_data NATURAL JOIN address AS foo WHERE user_id = '" + searchId + "'");
+					"SELECT * FROM (user_data NATURAL JOIN address) AS FOO WHERE user_id = '" + searchID + "'");
+
 			while (rs.next()) {
 				int user_id = rs.getInt("user_id");
 				String name = rs.getString("name");
@@ -70,7 +73,7 @@ public class SearchServlet extends HttpServlet {
 				String prefecture = rs.getString("prefecture");
 
 				out.println("<tr>");
-				out.println("<td><a href=\"item?user_id=" + user_id + "\">" + user_id+ "</a></td>");
+				out.println("<td><a href=\"item?user_id=" + user_id + "\">" + user_id + "</a></td>");
 				out.println("<td>" + name + "</td>");
 				out.println("<td>" + age + "</td>");
 				out.println("<td>" + tel + "</td>");
@@ -95,7 +98,7 @@ public class SearchServlet extends HttpServlet {
 		}
 
 		out.println("<br/>");
-		out.println("<a href=\"cordinator\">検索ページに戻る</a>");
+		out.println("<a href=\"cordinator.html\">検索ページに戻る</a>");
 		out.println("</body>");
 		out.println("</html>");
 	}

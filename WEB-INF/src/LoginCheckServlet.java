@@ -42,10 +42,10 @@ public class LoginCheckServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 
-		String username = request.getParameter("username"); //username
+		String username = request.getParameter("username"); // username
 		String password = request.getParameter("password"); // pass
-    out.println("<html>");
-    out.println("<style> body {color : dimgray;  font : 20px;}</style>");
+		out.println("<html>");
+		out.println("<style> body {color : dimgray;  font : 20px;}</style>");
 		out.println("<body>");
 
 		Connection conn = null;
@@ -57,19 +57,26 @@ public class LoginCheckServlet extends HttpServlet {
 			stmt = conn.createStatement();
 
 			ResultSet rs = stmt.executeQuery("SELECT * FROM login WHERE username = '" + username + "'");
-      while(rs.next()){
-        int user_id = rs.getInt("user_id");
-        String pass = rs.getString("password");
-        if(pass.contains(password)){
-          out.print("<h2>ログインに成功しました。</h2><p>あなたのユーザIDは");
-          out.print("<a href=\"donor.html?user_id=" + user_id + "\">" + user_id+ "</a>");
-          out.print("です</p>");
-        }
-        else{
-          out.println("ログイン失敗です。");
-          out.print("<a href=\"login.html\">ログインページへ戻る</a>");
-        }
-      }
+			while (rs.next()) {
+				String pass = rs.getString("password");
+				if (pass.contains(password)) {
+					out.print("<h2>ログインに成功しました。</h2>");
+					if (username.contains("donor")) {
+						int user_id = rs.getInt("user_id");
+						out.print("<p>あなたのユーザIDは、<a href=\"donor.html?user_id=" + user_id + "\">" + user_id
+								+ "</a>です</p>");
+					} else if (username.contains("patient")) {
+						int user_id = rs.getInt("user_id");
+						out.print("<p>あなたのユーザIDは、<a href=\"index.html?user_id=" + user_id + "\">" + user_id
+								+ "</a>です</p>");
+					} else {
+						out.print("<a href=\"cordinator.html\">管理ページへ</a>");
+					}
+				} else {
+					out.println("ログイン失敗です。");
+					out.print("<a href=\"login.html\">ログインページへ戻る</a>");
+				}
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
