@@ -55,20 +55,28 @@ public class SearchPatientServlet extends HttpServlet {
 		out.println("<html>");
 		out.println("<body>");
 
-		out.println("<h3>適合するドナー一覧</h3>");
+		out.println("<h2 style=\"color : dimgray\">適合するドナー一覧</h2>");
 		Connection conn = null;
+		Statement stmt0 = null;
 		Statement stmt = null;
+		Statement stmt1 = null;
+		Statement stmt2 = null;
+		Statement stmt3 = null;
+		Statement stmt4 = null;
+		Statement stmt5 = null;
+		Statement stmt_new = null;
 		int loginer_fam = 0;
 		try {
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("jdbc:postgresql://" + _hostname + ":5432/" + _dbname, _username,
 					_password);
-			stmt = conn.createStatement();
-			ResultSet rs0 = stmt.executeQuery("SELECT family_id FROM relationship WHERE user_id = '" + loginer + "'");
+			stmt0 = conn.createStatement();
+			ResultSet rs0 = stmt0.executeQuery("SELECT family_id FROM relationship WHERE user_id = '" + loginer + "'");
 			if (rs0.next()) {
 				loginer_fam = rs0.getInt("family_id");
 			}
 			rs0.close();
+			stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM (SELECT * FROM hla NATURAL JOIN register) AS FOO WHERE a = "
 					+ searchA + " and b = " + searchB + " and c = " + searchC + " and dr = " + searchDR
 					+ " and patient_or_donor = 'D'");
@@ -90,14 +98,14 @@ public class SearchPatientServlet extends HttpServlet {
 				int C = rs.getInt("c");
 				int DR = rs.getInt("dr");
 				users.add(user_id);
-				ResultSet rs_n = stmt
+				stmt_new = conn.createStatement();
+				ResultSet rs_new = stmt_new
 						.executeQuery("SELECT family_id FROM relationship WHERE user_id = '" + user_id + "'"); // 一致した人が血縁者がどうかを調べる。
 				int fam_id = -1;
-				if (rs_n.next()) {
-					fam_id = rs_n.getInt("family_id");
-					out.print(fam_id);
+				if (rs_new.next()) {
+					fam_id = rs_new.getInt("family_id");
 				}
-				rs_n.close();
+				rs_new.close();
 				if (loginer_fam == fam_id) { // 一致した人が血縁者,一致している型だけ色をつける
 					out.println("<tr>");
 					out.println("<td >" + hla_id + "</td>");
@@ -119,7 +127,6 @@ public class SearchPatientServlet extends HttpServlet {
 					out.println("<td>×</td>");
 					out.println("</tr>");
 				}
-
 			}
 			rs.close();
 			String execludeDR = "a = " + searchA + " and b = " + searchB + " and c = " + searchC
@@ -131,32 +138,37 @@ public class SearchPatientServlet extends HttpServlet {
 			String execludeA = "a = " + searchA + " and b = " + searchB + " and dr = " + searchDR
 					+ " and patient_or_donor = 'D'";
 
-			ResultSet rs1 = stmt
+			stmt1 = conn.createStatement();
+			ResultSet rs1 = stmt1
 					.executeQuery("SELECT * FROM (SELECT * FROM hla NATURAL JOIN register) AS FOO WHERE " + execludeDR); // DRだけ違う
 			while (rs1.next()) {
 				showList(rs1, out, loginer_fam, stmt, "DR", users);
 			}
 			rs1.close();
-			ResultSet rs2 = stmt
+			stmt2 = conn.createStatement();
+			ResultSet rs2 = stmt2
 					.executeQuery("SELECT * FROM (SELECT * FROM hla NATURAL JOIN register) AS FOO WHERE " + execludeC);
 			while (rs2.next()) {
 				showList(rs2, out, loginer_fam, stmt, "C", users);
 			}
 			rs2.close();
-			ResultSet rs3 = stmt
+			stmt3 = conn.createStatement();
+			ResultSet rs3 = stmt3
 					.executeQuery("SELECT * FROM (SELECT * FROM hla NATURAL JOIN register) AS FOO WHERE " + execludeB);
 			while (rs3.next()) {
 				showList(rs3, out, loginer_fam, stmt, "B", users);
 			}
 			rs3.close();
-			ResultSet rs4 = stmt
+			stmt4 = conn.createStatement();
+			ResultSet rs4 = stmt4
 					.executeQuery("SELECT * FROM (SELECT * FROM hla NATURAL JOIN register) AS FOO WHERE " + execludeA);
 			while (rs4.next()) {
 				showList(rs4, out, loginer_fam, stmt, "A", users);
 			}
 			rs4.close();
 			// ここからは家族だけ
-			ResultSet rs5 = stmt.executeQuery(
+			stmt5 = conn.createStatement();
+			ResultSet rs5 = stmt5.executeQuery(
 					"SELECT * FROM (SELECT * FROM relationship NATURAL JOIN register NATURAL JOIN hla) AS FOO WHERE family_id = '"
 							+ loginer_fam + "'");
 			while (rs5.next()) {
@@ -166,7 +178,6 @@ public class SearchPatientServlet extends HttpServlet {
 				int B = rs5.getInt("b");
 				int C = rs5.getInt("c");
 				int DR = rs5.getInt("dr");
-				out.print(family_user);
 				if (A == searchA) {// 型が一致すれば0にする
 					A = 0;
 				}
