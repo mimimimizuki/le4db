@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+//cordinatorが削除
 @SuppressWarnings("serial")
 public class DeleteServlet extends HttpServlet {
 	// donor can delete his infomation
@@ -62,6 +63,7 @@ public class DeleteServlet extends HttpServlet {
 			stmt.executeUpdate("DELETE FROM user_data WHERE user_id= '" + deleteuser_data + "'");
 			stmt.executeUpdate("DELETE FROM address WHERE user_id ='" + deleteuser_data + "'");
 			stmt.executeUpdate("DELETE FROM contact WHERE user_id ='" + deleteuser_data + "'");
+			stmt.executeUpdate("DELETE FROM relationship WHERE user_id ='" + deleteuser_data + "'");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -76,8 +78,7 @@ public class DeleteServlet extends HttpServlet {
 		}
 
 		out.println("<br/>");
-		out.println("<a href=\"cordinator\">ドナー検索に戻る</a>");
-		out.println("<a href=\"donor.html\">前ページへ</a>");
+		out.println("<a href=\"cordinator.html\">管理ページに戻る</a>");
 
 		out.println("</body>");
 		out.println("</html>");

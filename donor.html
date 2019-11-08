@@ -111,10 +111,10 @@ function colorReset(argObj){
 <body>
 <ul class="hidden_box">
 <label for="register" id="msg_menu_settings" style="
-    font-size: 25px;">データ登録</label>
+    font-size: 25px;">家族のデータ登録</label>
     <input type="checkbox" id="register"/>
     <div class="hidden_show" style="padding-top: 25px;">
-    <form action="\add" method="POST">
+    <form action="\add" method="POST"><input id="user" name="user_id" value="">
     <div class="center">
 		<input type="text" placeholder="氏名" name="add_name" class="inText" onblur="coloeSet(this)"
     onfocus="colorReset(this)"/>
@@ -131,6 +131,8 @@ function colorReset(argObj){
 		<input type="text" placeholder="C" name="add_C" class="inText" onblur="coloeSet(this)"
     onfocus="colorReset(this)"/>
 		<input type="text" placeholder="DR" name="add_DR" class="inText" onblur="coloeSet(this)"
+    onfocus="colorReset(this)"/>
+    <input type="text" placeholder="代表者との関係" name="add_relationship" class="inText" onblur="coloeSet(this)"
     onfocus="colorReset(this)"/>
     <input type="submit" value="登録" class="Icon"/>
     </div>
@@ -165,5 +167,13 @@ function colorReset(argObj){
     </div>
     </form>
 </ul>
+<script>
+var query = window.location.search.substring(1);
+    var pair = query.split("=");
+    if (pair[0] == 'user_id') {
+        console.log(pair[1]);
+        document.getElementById("user").value = pair[1];
+}
+</script>
 </body>
 </html>

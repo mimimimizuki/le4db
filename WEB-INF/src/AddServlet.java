@@ -51,12 +51,15 @@ public class AddServlet extends HttpServlet {
 		String addDR = request.getParameter("add_DR");
 		String addAddress = request.getParameter("add_address");
 		String addprefecture = request.getParameter("add_prefecture");
+		String addrelationship = request.getParameter("add_relationship");
+		int loginer = Integer.parseInt(request.getParameter("user_id"));
 
 		out.println("<html>");
 		out.println("<body>");
 
 		Connection conn = null;
 		Statement stmt = null;
+		Statement stmt_fam = null;
 		int max_user_data = 0;
 		try {
 			Class.forName("org.postgresql.Driver");
@@ -75,10 +78,9 @@ public class AddServlet extends HttpServlet {
 					"INSERT INTO user_data VALUES( '" + adduser_data + "', '" + addName + "', '" + addage + "')");
 			// stmt.executeUpdate("INSERT INTO hla VALUES(" + addA + ", '" + addB + ",'" +
 			// addC + ",'" + addDR + ")");
-			out.println(addprefecture);
 			stmt.executeUpdate(
 					"INSERT INTO contact VALUES( '" + addAddress + "', '" + adduser_data + "', '" + addName + "')");
-			stmt.executeUpdate("INSERT INTO address VALUES( '" + addAddress + "', '" + adduser_data + "', '"
+			stmt.executeUpdate("INSERT INTO address VALUES( '" + adduser_data + "', '" + addAddress + "', '"
 					+ addprefecture + "')");
 
 			out.println("以下のユーザを追加しました。<br/><br/>");
@@ -87,7 +89,14 @@ public class AddServlet extends HttpServlet {
 			out.println("年齢: " + addage + "<br/>");
 			out.println("居場所: " + addprefecture + "<br/>");
 			out.println("電話番号: " + addAddress + "<br/>");
-
+			stmt_fam = conn.createStatement();
+			ResultSet rs_fam = stmt_fam.executeQuery("SELECT * FROM relationship WHERE user_id = '" + loginer + "'");
+			rs_fam.next();
+			int fam_id = rs_fam.getInt("family_id");
+			stmt_fam.executeUpdate("INSERT INTO relationship VALUES( '" + adduser_data + "', '" + fam_id + "', '"
+					+ addrelationship + "')");
+			rs_fam.close();
+			out.println("家族ID: " + addrelationship + "<br/>");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
