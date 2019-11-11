@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+//donorが場所と連絡先を更新
 @SuppressWarnings("serial")
 public class UpdateServlet extends HttpServlet {
 
@@ -42,7 +43,7 @@ public class UpdateServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		String updateuser_data = request.getParameter("update_user_data");
-		String updateTEL = request.getParameter("update_tel"); // tel
+		int updateTEL = Integer.parseInt(request.getParameter("update_address")); // tel
 		String updatePrefecture = request.getParameter("update_prefecture"); // prefecture
 
 		out.println("<html>");
@@ -56,14 +57,15 @@ public class UpdateServlet extends HttpServlet {
 					_password);
 			stmt = conn.createStatement();
 
-			stmt.executeUpdate("UPDATE address SET tel = '" + updateTEL + "', prefecture = '" + updatePrefecture
+			stmt.executeUpdate("UPDATE address SET tel = " + updateTEL + ", prefecture = '" + updatePrefecture
 					+ "' WHERE user_id = '" + updateuser_data + "'");
 
 			out.println("以下のユーザを更新しました。<br/><br/>");
 			out.println("ユーザID: " + updateuser_data + "<br/>");
 			out.println("連絡先: " + updateTEL + "<br/>");
 			out.println("居場所: " + updatePrefecture + "<br/>");
-			stmt.executeUpdate("UPDATE contact SET tel = '" + updateTEL + "WHERE user_id = '" + "'");
+			stmt.executeUpdate(
+					"UPDATE contact SET tel = '" + updateTEL + "' WHERE user_id = '" + updateuser_data + "'");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -78,7 +80,7 @@ public class UpdateServlet extends HttpServlet {
 		}
 
 		out.println("<br/>");
-		out.println("<a href=\"donor\">ドナーページに戻る</a>");
+		out.println("<a href=\"donor.html?user_id=" + updateuser_data + "\">" + "前ページに戻る" + "</a>");
 
 		out.println("</body>");
 		out.println("</html>");

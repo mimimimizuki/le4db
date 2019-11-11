@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//cordinatorが削除
+//cordinatorが削除(patient)
+//donor が削除(donor)
 @SuppressWarnings("serial")
 public class DeleteServlet extends HttpServlet {
 	// donor can delete his infomation
@@ -55,15 +56,16 @@ public class DeleteServlet extends HttpServlet {
 					_password);
 			stmt = conn.createStatement();
 
-			ResultSet rs = stmt.executeQuery("SELECT * FROM user_data WHERE user_id = '" + deleteuser_data + "'");
+			// ResultSet rs = stmt.executeQuery("SELECT * FROM user_data WHERE user_id = '"
+			// + deleteuser_data + "'");
 			out.println("以下のユーザを削除しました。<br/><br/>");
 			out.println("ユーザID: " + deleteuser_data + "<br/>");
-			rs.close();
+			// rs.close();
+			stmt.executeUpdate("DELETE FROM relationship WHERE user_id ='" + deleteuser_data + "'");
 			stmt.executeUpdate("DELETE FROM register WHERE user_id= '" + deleteuser_data + "'");
 			stmt.executeUpdate("DELETE FROM user_data WHERE user_id= '" + deleteuser_data + "'");
 			stmt.executeUpdate("DELETE FROM address WHERE user_id ='" + deleteuser_data + "'");
 			stmt.executeUpdate("DELETE FROM contact WHERE user_id ='" + deleteuser_data + "'");
-			stmt.executeUpdate("DELETE FROM relationship WHERE user_id ='" + deleteuser_data + "'");
 
 		} catch (Exception e) {
 			e.printStackTrace();

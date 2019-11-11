@@ -55,6 +55,11 @@
     <servlet-class>DeleteServlet</servlet-class>
   </servlet>
 
+  <servlet>
+    <servlet-name>DeleteDonor</servlet-name>
+    <servlet-class>DeleteDonorServlet</servlet-class>
+  </servlet>
+
   <servlet-mapping>
     <servlet-name>Donor</servlet-name>
     <url-pattern>/donor</url-pattern>
@@ -83,6 +88,11 @@
   <servlet-mapping>
     <servlet-name>Delete</servlet-name>
     <url-pattern>/delete</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>DeleteDonor</servlet-name>
+    <url-pattern>/deletedonor</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

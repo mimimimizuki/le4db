@@ -12,9 +12,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+//cordinatorが削除(patient)
+//donor が削除(donor)
 @SuppressWarnings("serial")
-public class PatientServlet extends HttpServlet {
-
+public class DeleteDonorServlet extends HttpServlet {
+    // donor can delete his infomation
     private String _hostname = null;
     private String _dbname = null;
     private String _username = null;
@@ -42,22 +44,43 @@ public class PatientServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
+        String deleteuser_data = request.getParameter("delete_user_id");
+
         out.println("<html>");
         out.println("<body>");
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.postgresql.Driver");
+            conn = DriverManager.getConnection("jdbc:postgresql://" + _hostname + ":5432/" + _dbname, _username,
+                    _password);
+            stmt = conn.createStatement();
 
-        out.println("<h3>検索</h3>");
-        out.println("<form action=\"search_patient\" method=\"GET\">");
-        out.println("A： ");
-        out.println("<input type=\"text\" name=\"search_A\"/>");
-        out.println("B： ");
-        out.println("<input type=\"text\" name=\"search_B\"/>");
-        out.println("C： ");
-        out.println("<input type=\"text\" name=\"search_C\"/>");
-        out.println("DR： ");
-        out.println("<input type=\"text\" name=\"search_DR\"/>");
+            // ResultSet rs = stmt.executeQuery("SELECT * FROM user_data WHERE user_id = '"
+            // + deleteuser_data + "'");
+            out.println("以下のユーザを削除しました。<br/><br/>");
+            out.println("ユーザID: " + deleteuser_data + "<br/>");
+            // rs.close();
+            stmt.executeUpdate("DELETE FROM relationship WHERE user_id ='" + deleteuser_data + "'");
+            stmt.executeUpdate("DELETE FROM register WHERE user_id= '" + deleteuser_data + "'");
+            stmt.executeUpdate("DELETE FROM user_data WHERE user_id= '" + deleteuser_data + "'");
+            stmt.executeUpdate("DELETE FROM address WHERE user_id ='" + deleteuser_data + "'");
+            stmt.executeUpdate("DELETE FROM contact WHERE user_id ='" + deleteuser_data + "'");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
         out.println("<br/>");
-        out.println("<input type=\"submit\" value=\"検索\"/>");
-        out.println("</form>");
+        out.println("<a href=\"donor.html?user_id=" + deleteuser_data + "\">" + "前ページに戻る" + "</a>");
 
         out.println("</body>");
         out.println("</html>");

@@ -87,6 +87,7 @@ body {
 .Icon:hover {
   opacity       : 0.9;   /* カーソル時透明度 */
 }
+
 </style>
 </head>
 <body>
@@ -108,11 +109,12 @@ body {
     <div class="hidden_show" style="padding-top: 25px;">
     <form action="\search" method="GET">
     <div class="center">
-    <input type="text" placeholder="A" name="search_user_id" class="inText" onblur="coloeSet(this)"
+    <input type="text" placeholder="ユーザID" name="search_user_id" class="inText" onblur="coloeSet(this)"
     onfocus="colorReset(this)"/>
     <input type="submit" value="検索" class="Icon"/>
     </form>
     </div>
 </ul>
+<a href="/login.html">ログアウト</a>
 </body>
 </html>

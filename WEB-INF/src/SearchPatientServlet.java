@@ -235,7 +235,7 @@ public class SearchPatientServlet extends HttpServlet {
 		}
 
 		out.println("<br/>");
-		out.println("<a href=\"index.html\">検索ページに戻る</a>");
+		out.println("<a href=\"index.html?user_id=" + loginer + "\">" + "検索ページに戻る" + "</a>");
 
 		out.println("</body>");
 		out.println("</html>");

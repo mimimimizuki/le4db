@@ -60,6 +60,7 @@ public class AddServlet extends HttpServlet {
 		Connection conn = null;
 		Statement stmt = null;
 		Statement stmt_fam = null;
+		Statement stmt_leader = null;
 		int max_user_data = 0;
 		try {
 			Class.forName("org.postgresql.Driver");
@@ -96,7 +97,12 @@ public class AddServlet extends HttpServlet {
 			stmt_fam.executeUpdate("INSERT INTO relationship VALUES( '" + adduser_data + "', '" + fam_id + "', '"
 					+ addrelationship + "')");
 			rs_fam.close();
-			out.println("家族ID: " + addrelationship + "<br/>");
+			stmt_leader = conn.createStatement();
+			ResultSet rs_leader = stmt_leader.executeQuery("SELECT * FROM family WHERE family_id = '" + fam_id + "'");
+			rs_leader.next();
+			String leader = rs_leader.getString("leader");
+			out.println(leader + "との関係: " + addrelationship + "<br/>");
+			rs_leader.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -110,7 +116,7 @@ public class AddServlet extends HttpServlet {
 		}
 
 		out.println("<br/>");
-		out.println("<a href=\"donor.html\">前ページへ戻る</a>");
+		out.println("<a href=\"donor.html?user_id=" + loginer + "\">" + "前ページに戻る" + "</a>");
 
 		out.println("</body>");
 		out.println("</html>");

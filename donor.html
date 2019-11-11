@@ -93,6 +93,7 @@ body {
 .center {
   vertical-align : center;
 }
+
 </style>
 <script>
 function coloeSet(argObj){
@@ -114,7 +115,8 @@ function colorReset(argObj){
     font-size: 25px;">家族のデータ登録</label>
     <input type="checkbox" id="register"/>
     <div class="hidden_show" style="padding-top: 25px;">
-    <form action="\add" method="POST"><input id="user" name="user_id" value="">
+    <form action="\add" method="POST"><input id="register_user" name="user_id" value="" style="
+    display: none;">
     <div class="center">
 		<input type="text" placeholder="氏名" name="add_name" class="inText" onblur="coloeSet(this)"
     onfocus="colorReset(this)"/>
@@ -142,10 +144,9 @@ function colorReset(argObj){
 <label for="delete" id="msg_menu_settings" style="font-size: 25px;">データの削除</label>
     <input type="checkbox" id="delete"/>
     <div class="hidden_show" style="padding-top: 25px;">
-    <form action="\delete" method="GET">
-    <div class="center">
-    <input type="text" placeholder="ユーザ名" name="delete_user_id" class="inText" onblur="coloeSet(this)"
-    onfocus="colorReset(this)"/>
+    <form action="\deletedonor" method="GET">
+    <div class="center"><input id="delete_user" name="delete_user_id" value="" style="
+    display: none;">
     <input type="submit" value="データを削除する" class="Icon"/>
     </form>
     </div>
@@ -156,9 +157,8 @@ function colorReset(argObj){
     <input type="checkbox" id="update"/>
     <div class="hidden_show" style="padding-top: 25px;">
     <form action="\update" method="GET">
-    <div class="center">
-    <input type="text" placeholder="ユーザ名" name="update_user_data" class="inText" onblur="coloeSet(this)"
-    onfocus="colorReset(this)"/>
+    <div class="center"><input id="update_user" name="update_user_data" value="" style="
+    display: none;">
 		<input type="text" placeholder="連絡先" name="update_address" class="inText" onblur="coloeSet(this)"
     onfocus="colorReset(this)"/>
 		<input type="text" placeholder="居場所" name="update_prefecture" class="inText" onblur="coloeSet(this)"
@@ -167,12 +167,15 @@ function colorReset(argObj){
     </div>
     </form>
 </ul>
+<a href="/login.html">ログアウト</a>
 <script>
 var query = window.location.search.substring(1);
     var pair = query.split("=");
     if (pair[0] == 'user_id') {
         console.log(pair[1]);
-        document.getElementById("user").value = pair[1];
+        document.getElementById("register_user").value = pair[1];
+        document.getElementById("delete_user").value = pair[1];
+        document.getElementById("update_user").calue = pair[1];
 }
 </script>
 </body>
