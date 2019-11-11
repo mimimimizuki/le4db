@@ -41,6 +41,11 @@
   </servlet>
 
   <servlet>
+    <servlet-name>AddAll</servlet-name>
+    <servlet-class>AddAllServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>Item</servlet-name>
     <servlet-class>ItemServlet</servlet-class>
   </servlet>
@@ -73,6 +78,11 @@
   <servlet-mapping>
     <servlet-name>Add</servlet-name>
     <url-pattern>/add</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>AddAll</servlet-name>
+    <url-pattern>/addall</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
