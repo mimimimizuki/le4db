@@ -48,6 +48,9 @@ public class UpdateServlet extends HttpServlet {
 
 		out.println("<html>");
 		out.println("<body>");
+		out.println("<style>");
+		out.println("body {color : dimgray; }");
+		out.println("</style>");
 
 		Connection conn = null;
 		Statement stmt = null;
@@ -56,16 +59,17 @@ public class UpdateServlet extends HttpServlet {
 			conn = DriverManager.getConnection("jdbc:postgresql://" + _hostname + ":5432/" + _dbname, _username,
 					_password);
 			stmt = conn.createStatement();
+			conn.setAutoCommit(false);
 
 			stmt.executeUpdate("UPDATE address SET tel = " + updateTEL + ", prefecture = '" + updatePrefecture
 					+ "' WHERE user_id = '" + updateuser_data + "'");
-
-			out.println("以下のユーザを更新しました。<br/><br/>");
+			stmt.executeUpdate(
+					"UPDATE contact SET tel = '" + updateTEL + "' WHERE user_id = '" + updateuser_data + "'");
+			conn.commit();
+			out.println("<h3>以下のユーザを更新しました。</h3><br/>");
 			out.println("ユーザID: " + updateuser_data + "<br/>");
 			out.println("連絡先: " + updateTEL + "<br/>");
 			out.println("居場所: " + updatePrefecture + "<br/>");
-			stmt.executeUpdate(
-					"UPDATE contact SET tel = '" + updateTEL + "' WHERE user_id = '" + updateuser_data + "'");
 
 		} catch (Exception e) {
 			e.printStackTrace();

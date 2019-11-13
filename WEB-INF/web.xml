@@ -21,11 +21,6 @@
   </servlet>
 
   <servlet>
-    <servlet-name>Patient</servlet-name>
-    <servlet-class>PatientServlet</servlet-class>
-  </servlet>
-
-  <servlet>
     <servlet-name>SearchPatient</servlet-name>
     <servlet-class>SearchPatientServlet</servlet-class>
   </servlet>
@@ -43,11 +38,6 @@
   <servlet>
     <servlet-name>AddAll</servlet-name>
     <servlet-class>AddAllServlet</servlet-class>
-  </servlet>
-
-  <servlet>
-    <servlet-name>Item</servlet-name>
-    <servlet-class>ItemServlet</servlet-class>
   </servlet>
 
   <servlet>
@@ -86,11 +76,6 @@
   </servlet-mapping>
 
   <servlet-mapping>
-    <servlet-name>Item</servlet-name>
-    <url-pattern>/item</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
     <servlet-name>Update</servlet-name>
     <url-pattern>/update</url-pattern>
   </servlet-mapping>
@@ -108,11 +93,6 @@
   <servlet-mapping>
     <servlet-name>Cordinator</servlet-name>
     <url-pattern>/cordinator</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>Patient</servlet-name>
-    <url-pattern>/patient</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

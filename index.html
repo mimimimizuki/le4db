@@ -21,38 +21,7 @@ function colorReset(argObj){
     padding-left: 35px;
     color: gray;
 }
-.hla:before {
-    position: absolute;
-    font-family: "Font Awesome 5 Free";
-    content: "\f0eb";
-    background: #ffca2c;
-    color: white;
-    font-weight: normal;
-    font-size: 15px;
-    border-radius: 50%;
-    left: 0;
-    width: 25px;
-    height: 25px;
-    line-height: 25px;
-    text-align: center;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-}
-.hla:after {
-    content: '';
-    display: block;
-    position: absolute;
-    left: 20px;
-    height: 0;
-    width: 0;
-    border-top: 7px solid transparent;
-    border-bottom: 7px solid transparent;
-    border-left: 12px solid #ffca2c;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-}
+
 body {
     color: dimgray;
 }
@@ -105,6 +74,9 @@ form {
 .Icon:hover {
   opacity       : 0.9;   /* カーソル時透明度 */
 }
+#user {
+    display : none;
+}
 </style>
 </head>
 <body>
@@ -122,6 +94,7 @@ form {
     
 <input type="submit" class="Icon" value="検索">
 </form>
+<br />
 <a href="/login.html">ログアウト</a>
 <!--ドナーの選択順位
 1位． HLA型の適合する同胞(兄弟・姉妹)、親子 ok

@@ -80,12 +80,6 @@ public class SearchPatientServlet extends HttpServlet {
 			ResultSet rs = stmt.executeQuery("SELECT * FROM (SELECT * FROM hla NATURAL JOIN register) AS FOO WHERE a = "
 					+ searchA + " and b = " + searchB + " and c = " + searchC + " and dr = " + searchDR
 					+ " and patient_or_donor = 'D'");
-			// select * from
-			// 知りたい:ユーザIDとHLA型z
-			// 条件に必要なもの:家族ID
-			// user_idをゲットした後に
-			// select family_id from relationship where user_id = ''
-			// family_id ==
 			out.println(
 					"<table border=\"1\" width=\"500\" cellspacing=\"0\" cellpadding=\"5\" bordercolor=\"#333333\">");
 			out.println(
@@ -170,7 +164,7 @@ public class SearchPatientServlet extends HttpServlet {
 			stmt5 = conn.createStatement();
 			ResultSet rs5 = stmt5.executeQuery(
 					"SELECT * FROM (SELECT * FROM relationship NATURAL JOIN register NATURAL JOIN hla) AS FOO WHERE family_id = '"
-							+ loginer_fam + "'");
+							+ loginer_fam + "' and patient_or_donor = 'D'");
 			while (rs5.next()) {
 				int family_user = rs5.getInt("user_id"); // 患者の血縁者のユーザID
 				int hla_id = rs5.getInt("hla_id");
@@ -197,22 +191,22 @@ public class SearchPatientServlet extends HttpServlet {
 					if (A == 0) {
 						out.println("<td style=\"color : red;\">" + searchA + "</td>");
 					} else {
-						out.println("<td>" + searchA + "</td>");
+						out.println("<td>" + A + "</td>");
 					}
 					if (B == 0) {
 						out.println("<td style=\"color : red;\">" + searchB + "</td>");
 					} else {
-						out.println("<td>" + searchB + "</td>");
+						out.println("<td>" + B + "</td>");
 					}
 					if (C == 0) {
 						out.println("<td style=\"color : red;\">" + searchC + "</td>");
 					} else {
-						out.println("<td>" + searchC + "</td>");
+						out.println("<td>" + C + "</td>");
 					}
 					if (DR == 0) {
 						out.println("<td style=\"color : red;\">" + searchDR + "</td>");
 					} else {
-						out.println("<td>" + searchDR + "</td>");
+						out.println("<td>" + DR + "</td>");
 					}
 					out.println("<td>○</td>");
 					out.println("</tr>");

@@ -56,7 +56,9 @@ public class AddAllServlet extends HttpServlet {
 
         out.println("<html>");
         out.println("<body>");
-
+        out.println("<style>");
+        out.println("body {color : dimgray; }");
+        out.println("</style>");
         Connection conn = null;
         Statement stmt = null;
         Statement stmt_hla = null;
@@ -68,6 +70,7 @@ public class AddAllServlet extends HttpServlet {
             Class.forName("org.postgresql.Driver");
             conn = DriverManager.getConnection("jdbc:postgresql://" + _hostname + ":5432/" + _dbname, _username,
                     _password);
+            conn.setAutoCommit(false);
             stmt = conn.createStatement();
 
             ResultSet rs = stmt.executeQuery("SELECT MAX(user_id) AS max_user FROM user_data");
@@ -78,28 +81,25 @@ public class AddAllServlet extends HttpServlet {
             int adduser_data = max_user_data + 1;// 54
             stmt.executeUpdate(
                     "INSERT INTO user_data VALUES( '" + adduser_data + "', '" + addName + "', '" + addage + "')");
-            // stmt.executeUpdate("INSERT INTO hla VALUES(" + addA + ", '" + addB + ",'" +
-            // addC + ",'" + addDR + ")");
             stmt.executeUpdate(
                     "INSERT INTO contact VALUES( '" + addAddress + "', '" + adduser_data + "', '" + addName + "')");
             stmt.executeUpdate("INSERT INTO address VALUES( '" + adduser_data + "', '" + addAddress + "', '"
                     + addprefecture + "')");
 
-            out.println("以下のユーザを追加しました。<br/><br/>");
+            out.println("<h3>以下のユーザを追加しました。</h3><br/>");
             out.println("ユーザID: " + adduser_data + "<br/>");
             out.println("名前: " + addName + "<br/>");
             out.println("年齢: " + addage + "<br/>");
             out.println("居場所: " + addprefecture + "<br/>");
             out.println("電話番号: " + addAddress + "<br/>");
             String username = "";
-            if (P_or_D == "P") {
-                out.println("ユーザ名: patient0" + adduser_data + "<br/>");
+            if (P_or_D.contains("P")) {
+                out.println("ログインID: patient0" + adduser_data + "<br/>");
                 username = "patient0" + adduser_data;
             } else {
-                out.println("ユーザ名: donor0" + adduser_data + "<br/>");
+                out.println("ログインID: donor0" + adduser_data + "<br/>");
                 username = "donor0" + adduser_data;
             }
-            out.println("パスワード: test <br/>");
             stmt.executeUpdate("INSERT INTO login VALUES ('" + username + "', '" + adduser_data + "', 'test')"); // loginできるようにする
             rs.close();
             stmt_hla = conn.createStatement();
@@ -110,6 +110,7 @@ public class AddAllServlet extends HttpServlet {
                 stmt_hla.executeUpdate(
                         "INSERT INTO register VALUES (" + same_hla + ", '" + P_or_D + "', " + adduser_data + ")");
                 rs_hla.close();
+                out.println("HLAの型:" + same_hla + " <br/>");
             } else {
                 int max_hla = 0;
                 stmt_max_hla = conn.createStatement();
@@ -117,12 +118,13 @@ public class AddAllServlet extends HttpServlet {
                 rs_max_hla.next();
                 max_hla = rs_max_hla.getInt("max_hla");
                 rs_max_hla.close();
-                max_hla = max_hla + 1;
+                int add_hla = max_hla + 1;
                 out.println();
-                stmt_max_hla.executeUpdate("INSERT INTO hla VALUES (" + max_hla + ", " + addA + ", " + addB + ", "
+                stmt_max_hla.executeUpdate("INSERT INTO hla VALUES (" + add_hla + ", " + addA + ", " + addB + ", "
                         + addC + ", " + addDR + ")");
                 stmt_max_hla.executeUpdate(
-                        "INSERT INTO register VALUES (" + max_hla + ", '" + P_or_D + "', '" + adduser_data + "')");
+                        "INSERT INTO register VALUES (" + add_hla + ", '" + P_or_D + "', '" + adduser_data + "')");
+                out.println("HLAの型:" + max_hla + " <br/>");
             }
             stmt_fam = conn.createStatement();
             ResultSet rs_fam = stmt_fam.executeQuery("SELECT MAX(family_id) AS max_fam FROM family");
@@ -130,8 +132,14 @@ public class AddAllServlet extends HttpServlet {
             int max_fam_id = rs_fam.getInt("max_fam");
             max_fam_id = max_fam_id + 1;
             String fam_name = addName.split(" ")[0];
-            stmt_fam.executeUpdate("INSERT INTO family VALUES (" + max_fam_id + ", '" + fam_name + "', '" + addName + "' )");
+            stmt_fam.executeUpdate(
+                    "INSERT INTO family VALUES (" + max_fam_id + ", '" + fam_name + "', '" + addName + "' )");
+            stmt_fam.executeUpdate(
+                    "INSERT INTO relationship VALUES (" + adduser_data + ", " + max_fam_id + ", " + "'本人' )");
             rs_fam.close();
+            conn.commit();
+            out.println("パスワード: test <br/>");
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

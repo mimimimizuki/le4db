@@ -56,16 +56,22 @@ public class AddServlet extends HttpServlet {
 
 		out.println("<html>");
 		out.println("<body>");
+		out.println("<style>");
+		out.println("body {color : dimgray; }");
+		out.println("</style>");
 
 		Connection conn = null;
 		Statement stmt = null;
 		Statement stmt_fam = null;
 		Statement stmt_leader = null;
+		Statement stmt_hla = null;
+		Statement stmt_max_hla = null;
 		int max_user_data = 0;
 		try {
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("jdbc:postgresql://" + _hostname + ":5432/" + _dbname, _username,
 					_password);
+			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
 
 			ResultSet rs = stmt.executeQuery("SELECT MAX(user_id) AS max_user FROM user_data");
@@ -83,13 +89,9 @@ public class AddServlet extends HttpServlet {
 					"INSERT INTO contact VALUES( '" + addAddress + "', '" + adduser_data + "', '" + addName + "')");
 			stmt.executeUpdate("INSERT INTO address VALUES( '" + adduser_data + "', '" + addAddress + "', '"
 					+ addprefecture + "')");
+			stmt.executeUpdate(
+					"INSERT INTO login VALUES ( 'donor0" + adduser_data + "', " + adduser_data + ", " + "'test')");
 
-			out.println("以下のユーザを追加しました。<br/><br/>");
-			out.println("ユーザID: " + adduser_data + "<br/>");
-			out.println("名前: " + addName + "<br/>");
-			out.println("年齢: " + addage + "<br/>");
-			out.println("居場所: " + addprefecture + "<br/>");
-			out.println("電話番号: " + addAddress + "<br/>");
 			stmt_fam = conn.createStatement();
 			ResultSet rs_fam = stmt_fam.executeQuery("SELECT * FROM relationship WHERE user_id = '" + loginer + "'");
 			rs_fam.next();
@@ -103,6 +105,36 @@ public class AddServlet extends HttpServlet {
 			String leader = rs_leader.getString("leader");
 			out.println(leader + "との関係: " + addrelationship + "<br/>");
 			rs_leader.close();
+			stmt_hla = conn.createStatement();
+			ResultSet rs_hla = stmt_hla.executeQuery("SELECT * FROM hla WHERE a = " + addA + " and b = " + addB
+					+ " and c = " + addC + " and dr = " + addDR);
+			if (rs_hla.next()) { // 同じhla型の人はすでに登録されているなら
+				int same_hla = rs_hla.getInt("hla_id");
+				stmt_hla.executeUpdate("INSERT INTO register VALUES (" + same_hla + ", 'D', " + adduser_data + ")");
+				rs_hla.close();
+			} else {
+				int max_hla = 0;
+				stmt_max_hla = conn.createStatement();
+				ResultSet rs_max_hla = stmt_max_hla.executeQuery("SELECT MAX(hla_id) AS max_hla FROM hla");
+				rs_max_hla.next();
+				max_hla = rs_max_hla.getInt("max_hla");
+				rs_max_hla.close();
+				int add_hla = max_hla + 1;
+				out.println();
+				stmt_max_hla.executeUpdate("INSERT INTO hla VALUES (" + add_hla + ", " + addA + ", " + addB + ", "
+						+ addC + ", " + addDR + ")");
+				stmt_max_hla
+						.executeUpdate("INSERT INTO register VALUES (" + add_hla + ", 'D', '" + adduser_data + "')");
+			}
+			conn.commit();
+			out.println("<h3>以下のユーザを追加しました。</h3><br/>");
+			out.println("ユーザID: " + adduser_data + "<br/>");
+			out.println("名前: " + addName + "<br/>");
+			out.println("年齢: " + addage + "<br/>");
+			out.println("居場所: " + addprefecture + "<br/>");
+			out.println("電話番号: " + addAddress + "<br/>");
+			out.println("ログインID: donor0" + adduser_data + "<br/>");
+			out.println("パスワード: test<br/>");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

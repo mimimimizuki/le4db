@@ -48,24 +48,43 @@ public class DeleteServlet extends HttpServlet {
 
 		out.println("<html>");
 		out.println("<body>");
+		out.println("<style>");
+		out.println("body {color : dimgray; }");
+		out.println("</style>");
 		Connection conn = null;
 		Statement stmt = null;
+		Statement stmt_hla = null;
 		try {
 			Class.forName("org.postgresql.Driver");
 			conn = DriverManager.getConnection("jdbc:postgresql://" + _hostname + ":5432/" + _dbname, _username,
 					_password);
+			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
 
-			// ResultSet rs = stmt.executeQuery("SELECT * FROM user_data WHERE user_id = '"
-			// + deleteuser_data + "'");
-			out.println("以下のユーザを削除しました。<br/><br/>");
-			out.println("ユーザID: " + deleteuser_data + "<br/>");
-			// rs.close();
 			stmt.executeUpdate("DELETE FROM relationship WHERE user_id ='" + deleteuser_data + "'");
-			stmt.executeUpdate("DELETE FROM register WHERE user_id= '" + deleteuser_data + "'");
-			stmt.executeUpdate("DELETE FROM user_data WHERE user_id= '" + deleteuser_data + "'");
+
 			stmt.executeUpdate("DELETE FROM address WHERE user_id ='" + deleteuser_data + "'");
 			stmt.executeUpdate("DELETE FROM contact WHERE user_id ='" + deleteuser_data + "'");
+			stmt.executeUpdate("DELETE FROM login WHERE user_id ='" + deleteuser_data + "'");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM register WHERE user_id ='" + deleteuser_data + "'");
+			rs.next();
+			int hla_id = rs.getInt("hla_id");
+			stmt.executeUpdate("DELETE FROM register WHERE user_id= '" + deleteuser_data + "'");
+			stmt.executeUpdate("DELETE FROM user_data WHERE user_id= '" + deleteuser_data + "'");
+			rs.close();
+			stmt_hla = conn.createStatement();
+			ResultSet rs_hla = stmt_hla.executeQuery("SELECT * FROM register WHERE hla_id ='" + hla_id + "'");
+			String same_user = "";
+			if (rs_hla.next()) {
+				same_user = rs_hla.getString("user_id");
+			}
+			if (same_user == "") {
+				stmt_hla.executeUpdate("DELETE FROM hla WHERE hla_id = '" + hla_id + "'");
+			}
+			rs_hla.close();
+			conn.commit();
+			out.println("<h3>以下のユーザを削除しました。</h3><br/>");
+			out.println("ユーザID: " + deleteuser_data + "<br/>");
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -47,6 +47,9 @@ public class SearchServlet extends HttpServlet {
 
 		out.println("<html>");
 		out.println("<body>");
+		out.println("<style>");
+		out.println("body {color : dimgray; }");
+		out.println("</style>");
 
 		out.println("<h3>ドナー情報</h3>");
 		Connection conn = null;
