@@ -67,7 +67,7 @@ public class LoginCheckServlet extends HttpServlet {
 								+ "</a>です</p>");
 					} else if (username.contains("patient")) {
 						int user_id = rs.getInt("user_id");
-						out.print("<p>あなたのユーザIDは、<a href=\"index.html?user_id=" + user_id + "\">" + user_id
+						out.print("<p>あなたのユーザIDは、<a href=\"patient.html?user_id=" + user_id + "\">" + user_id
 								+ "</a>です</p>");
 					} else {
 						out.print("<a href=\"cordinator.html\">管理ページへ</a>");

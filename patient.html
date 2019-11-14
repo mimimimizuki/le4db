@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Refresh" content="URL=/login.html">
+<script>
+function coloeSet(argObj){
+    if(argObj.value==""){
+        argObj.style.backgroundColor = "";
+    }else{
+        argObj.style.backgroundColor = "rgba(153, 153, 153, 0.20)";
+    }
+}
+function colorReset(argObj){
+    argObj.style.backgroundColor = "";
+}
+</script>
+</head>
+<style>
+.hla {
+    position: relative;
+    padding-left: 35px;
+    color: gray;
+}
+
+body {
+    color: dimgray;
+}
+form {
+    display : inline-block;
+}
+
+.inText {
+  box-sizing    : border-box;
+  margin        : 0;
+  vertical-align: top;
+  width         : 100%;                /* 一旦100%幅     */
+  max-width     : 150px;               /* 入力域の最大幅 */
+  height        : 38px;                /* 入力域の高さ   */
+  background    : #ffffff;             /* 入力域の背景色 */
+  border        : 2px solid #999999;   /* 入力域の枠線   */
+  border-radius : 4px;                 /* 入力域の角丸   */
+  padding       : 0 8px;              /* 入力文字の余白 */
+  font-size     : 23px;                /* 入力文字サイズ */
+  color         : #333333;             /* 入力文字の色   */
+  letter-spacing: .1em;                /* 入力文字の間隔 */
+}
+.inText:placeholder-shown {
+  color         : #808080;                 /* 文字色     */
+  font-size     : 16px;                    /* 少し小さく */
+}
+.inText::-webkit-input-placeholder {
+  color         : #808080;                 /* 文字色     */
+  font-size     : 16px;                    /* 少し小さく */
+}
+.inText:-ms-input-placeholder {
+  color         : #808080;                 /* 文字色     */
+  font-size     : 16px;                    /* 少し小さく */
+}
+.inText::-ms-clear {
+  display     : none;                      /* ×を消す   */
+}
+.Icon {
+    position      : initial;
+    padding       : 10px 10px;   /* 余白       */
+    background    : dimgray;     /* 背景色     */
+    color         : #ffffff;     /* 文字色     */
+    opacity       : 0.5;         /* 透明度     */
+    font-size     : 15pt;        /* 文字サイズ */
+    font-weight   : bold;        /* 太字       */
+    line-height   : 1.2em;       /* 行の高さ   */
+    letter-spacing: 2px;         /* 文字間隔   */
+}
+
+.Icon:hover {
+  opacity       : 0.9;   /* カーソル時透明度 */
+}
+#user {
+    display : none;
+}
+</style>
+</head>
+<body>
+<h1 class="hla">あなたのHLA型を入力してください。</h1>
+
+<form method="get" action="\search_patient"><input id="user" name="user_id" value="">
+<input type="text" placeholder="A" name="search_A" class="inText" onblur="coloeSet(this)"
+    onfocus="colorReset(this)">
+<input type="text" placeholder="B" name="search_B" class="inText" onblur="coloeSet(this)"
+    onfocus="colorReset(this)">
+<input type="text" placeholder="C" name="search_C" class="inText" onblur="coloeSet(this)"
+    onfocus="colorReset(this)">
+<input type="text" placeholder="DR" name="search_DR" class="inText" onblur="coloeSet(this)"
+    onfocus="colorReset(this)">
+    
+<input type="submit" class="Icon" value="検索">
+</form>
+<br />
+<a href="/login.html">ログアウト</a>
+<!--ドナーの選択順位
+1位． HLA型の適合する同胞(兄弟・姉妹)、親子 ok
+2位． HLA型の適合する非血縁者(骨髄バンクのドナー)ok
+3位． HLA型がひとつだけちがう血縁者 ok
+4位.　HLA型が2つか3つちがう血縁者、HLA型がひとつだけちがう非血縁者 ok
+
+表にして、ユーザIDとHLA型の５属性からなる表を出力
+-->
+<script>
+var query = window.location.search.substring(1);
+    var pair = query.split("=");
+    if (pair[0] == 'user_id') {
+        console.log(pair[1]);
+        document.getElementById("user").value = pair[1];
+}
+</script>
+</body>
+</html>
