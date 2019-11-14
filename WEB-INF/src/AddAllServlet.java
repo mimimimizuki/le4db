@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import java.util.Random;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -100,7 +101,8 @@ public class AddAllServlet extends HttpServlet {
                 out.println("ログインID: donor0" + adduser_data + "<br/>");
                 username = "donor0" + adduser_data;
             }
-            stmt.executeUpdate("INSERT INTO login VALUES ('" + username + "', '" + adduser_data + "', 'test')"); // loginできるようにする
+            String pw = password(4);
+            stmt.executeUpdate("INSERT INTO login VALUES ('" + username + "', '" + adduser_data + "', '" + pw + "')"); // loginできるようにする
             rs.close();
             stmt_hla = conn.createStatement();
             ResultSet rs_hla = stmt_hla.executeQuery("SELECT * FROM hla WHERE a = " + addA + " and b = " + addB
@@ -138,7 +140,8 @@ public class AddAllServlet extends HttpServlet {
                     "INSERT INTO relationship VALUES (" + adduser_data + ", " + max_fam_id + ", " + "'本人' )");
             rs_fam.close();
             conn.commit();
-            out.println("パスワード: test <br/>");
+            
+            out.println("パスワード: " + pw + " <br/>");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -166,4 +169,36 @@ public class AddAllServlet extends HttpServlet {
     public void destroy() {
     }
 
+    public static String password(int length) {
+    
+            //アルファベット大文字小文字のスタイル(normal/lowerCase/upperCase)
+            String style = "lowerCase";
+    
+            //生成処理
+            StringBuilder result = new StringBuilder();
+            //パスワードに使用する文字を格納
+            StringBuilder source = new StringBuilder();
+            //数字
+            for (int i = 0x30; i < 0x3A; i++) {
+                source.append((char) i);
+            }
+
+            //アルファベット小文字
+            switch (style) {
+                case "lowerCase":
+                    break;
+                default:
+                    for (int i = 0x41; i < 0x5b; i++) {
+                        source.append((char) i);
+                    }
+                    break;
+            }
+    
+            int sourceLength = source.length();
+            Random random = new Random();
+            while (result.length() < length) {
+                result.append(source.charAt(Math.abs(random.nextInt()) % sourceLength));
+            }
+            return result.toString();
+    }
 }

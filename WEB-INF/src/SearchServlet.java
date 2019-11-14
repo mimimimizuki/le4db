@@ -66,7 +66,7 @@ public class SearchServlet extends HttpServlet {
 					"<tr><th bgcolor=\"gray\"><font color=\"#FFFFFF\">user_id</th><th bgcolor=\"gray\"><font color=\"#FFFFFF\">氏名</th><th bgcolor=\"gray\"><font color=\"#FFFFFF\">年齢</th><th bgcolor=\"gray\"><font color=\"#FFFFFF\">連絡先</th><th bgcolor=\"gray\"><font color=\"#FFFFFF\">居場所</th></tr>");
 			// ResultSet rs = stmt.executeQuery("SELECT * FROM address");
 			ResultSet rs = stmt.executeQuery(
-					"SELECT * FROM (user_data NATURAL JOIN address) AS FOO WHERE user_id = '" + searchID + "'");
+					"SELECT * FROM info WHERE user_id = '" + searchID + "'");
 
 			while (rs.next()) {
 				int user_id = rs.getInt("user_id");
@@ -76,7 +76,7 @@ public class SearchServlet extends HttpServlet {
 				String prefecture = rs.getString("prefecture");
 
 				out.println("<tr>");
-				out.println("<td><a href=\"item?user_id=" + user_id + "\">" + user_id + "</a></td>");
+				out.println("<td> "+ user_id + "</td>");
 				out.println("<td>" + name + "</td>");
 				out.println("<td>" + age + "</td>");
 				out.println("<td>" + tel + "</td>");

@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class SearchPatientServlet extends HttpServlet {
 	// コーディネータがユーザIDと一致する人の連絡先などを知るために検索する
-	// patientが自分と一致するHLA型の人を探すために検索する<-
+	// patientが自分と一致するHLA型の人を探すために検索する<-(12,3,5,21)
 	private String _hostname = null;
 	private String _dbname = null;
 	private String _username = null;
@@ -54,6 +54,9 @@ public class SearchPatientServlet extends HttpServlet {
 		ArrayList<Integer> users = new ArrayList<>();
 		out.println("<html>");
 		out.println("<body>");
+		out.println("<style>");
+		out.println("body {color : dimgray; }");
+		out.println("</style>");
 
 		out.println("<h2 style=\"color : dimgray\">適合するドナー一覧</h2>");
 		Connection conn = null;
@@ -229,8 +232,11 @@ public class SearchPatientServlet extends HttpServlet {
 		}
 
 		out.println("<br/>");
-		out.println("<a href=\"patient.html?user_id=" + loginer + "\">" + "検索ページに戻る" + "</a>");
-
+		out.println("<a href=\"patient.html?user_id=" + loginer + "\">" + "検索ページに戻る" + "</a><br /><br />");
+		out.println("<p>1. HLA型の適合する血縁関係者</p>");
+		out.println("<p>2. HLA型の適合する非血縁者(骨髄バンクのドナー)</p>");
+		out.println("<p>3. HLA型がひとつだけちがう血縁者</p>");
+		out.println("<p>4. HLA型が2つか3つちがう血縁者、HLA型がひとつだけちがう非血縁者</p>");
 		out.println("</body>");
 		out.println("</html>");
 	}

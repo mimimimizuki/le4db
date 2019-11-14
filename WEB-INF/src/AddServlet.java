@@ -1,12 +1,14 @@
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.String;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import java.util.Random;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -89,8 +91,9 @@ public class AddServlet extends HttpServlet {
 					"INSERT INTO contact VALUES( '" + addAddress + "', '" + adduser_data + "', '" + addName + "')");
 			stmt.executeUpdate("INSERT INTO address VALUES( '" + adduser_data + "', '" + addAddress + "', '"
 					+ addprefecture + "')");
+			String pw = password(4);
 			stmt.executeUpdate(
-					"INSERT INTO login VALUES ( 'donor0" + adduser_data + "', " + adduser_data + ", " + "'test')");
+					"INSERT INTO login VALUES ( 'donor0" + adduser_data + "', " + adduser_data + ", '"+ pw + "')");
 
 			stmt_fam = conn.createStatement();
 			ResultSet rs_fam = stmt_fam.executeQuery("SELECT * FROM relationship WHERE user_id = '" + loginer + "'");
@@ -134,7 +137,8 @@ public class AddServlet extends HttpServlet {
 			out.println("居場所: " + addprefecture + "<br/>");
 			out.println("電話番号: " + addAddress + "<br/>");
 			out.println("ログインID: donor0" + adduser_data + "<br/>");
-			out.println("パスワード: test<br/>");
+			
+			out.println("パスワード: " + pw + "<br/>");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -161,5 +165,36 @@ public class AddServlet extends HttpServlet {
 
 	public void destroy() {
 	}
+	public static String password(int length) {
+    
+		//アルファベット大文字小文字のスタイル(normal/lowerCase/upperCase)
+		String style = "lowerCase";
 
+		//生成処理
+		StringBuilder result = new StringBuilder();
+		//パスワードに使用する文字を格納
+		StringBuilder source = new StringBuilder();
+		//数字
+		for (int i = 0x30; i < 0x3A; i++) {
+			source.append((char) i);
+		}
+
+		//アルファベット小文字
+		switch (style) {
+			case "lowerCase":
+				break;
+			default:
+				for (int i = 0x41; i < 0x5b; i++) {
+					source.append((char) i);
+				}
+				break;
+		}
+
+		int sourceLength = source.length();
+		Random random = new Random();
+		while (result.length() < length) {
+			result.append(source.charAt(Math.abs(random.nextInt()) % sourceLength));
+		}
+		return result.toString();
+}
 }
